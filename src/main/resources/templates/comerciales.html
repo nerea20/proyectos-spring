@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Comerciales</title>
+	<style>
+		.contenedor {
+			width: 95%;
+			margin: 0 auto;
+		}
+
+		.encabezado {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.tabla {
+			display: table;
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.fila {
+			display: table-row;
+		}
+
+		.celda {
+			display: table-cell;
+			padding: 8px;
+			border-bottom: 1px solid #ccc;
+			vertical-align: middle;
+		}
+
+		.cabecera .celda {
+			font-weight: bold;
+			border-bottom: 2px solid #555;
+		}
+
+		.acciones {
+			white-space: nowrap;
+		}
+
+		.acciones form {
+			display: inline-block;
+			margin: 0 4px 0 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="contenedor" class="contenedor">
+		<div class="encabezado">
+			<div>
+				<h1>Comerciales</h1>
+			</div>
+			<div>
+				<form action="/comerciales/crear">
+					<input type="submit" value="Crear">
+				</form>
+			</div>
+		</div>
+		<div class="tabla">
+			<div class="fila cabecera">
+				<div class="celda">Id</div>
+				<div class="celda">Nombre</div>
+				<div class="celda">Apellido1</div>
+				<div class="celda">Apellido2</div>
+				<div class="celda">Comisión</div>
+				<div class="celda">Acciones</div>
+			</div>
+			<div class="fila" th:each="comercial : ${comerciales}">
+				<div class="celda" th:text="${comercial.id}">0</div>
+				<div class="celda" th:text="${comercial.nombre}">Nombre</div>
+				<div class="celda" th:text="${comercial.apellido1}">Apellido1</div>
+				<div class="celda" th:text="${comercial.apellido2 ?: '&nbsp;'}">Apellido2</div>
+				<div class="celda" th:text="${comercial.comision}">0.0</div>
+				<div class="celda acciones">
+					<form th:action="@{/comerciales/detalle/{id}(id=${comercial.id})}" method="get">
+						<input type="hidden" name="id" th:value="${comercial.id}"/>
+						<input type="submit" value="Ver detalle"/>
+					</form>
+					<form th:action="@{/comerciales/editar/{id}(id=${comercial.id})}" method="get">
+						<input type="hidden" name="id" th:value="${comercial.id}"/>
+						<input type="submit" value="Editar"/>
+					</form>
+					<form th:action="@{/comerciales/eliminar/{id}(id=${comercial.id})}" method="post">
+						<input type="hidden" name="id" th:value="${comercial.id}"/>
+						<input type="submit" value="Eliminar"/>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

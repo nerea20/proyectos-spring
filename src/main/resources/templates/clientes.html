@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+    <style>
+        .contenedor {
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .encabezado {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tabla {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .fila {
+            display: table-row;
+        }
+
+        .celda {
+            display: table-cell;
+            padding: 8px;
+            border-bottom: 1px solid #ccc;
+            vertical-align: middle;
+        }
+
+        .cabecera .celda {
+            font-weight: bold;
+            border-bottom: 2px solid #555;
+        }
+
+        .acciones {
+            white-space: nowrap;
+        }
+
+        .acciones form {
+            display: inline-block;
+            margin: 0 4px 0 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="contenedor" class="contenedor">
+        <div class="encabezado">
+            <div>
+                <h1>Clientes</h1>
+            </div>
+            <div>
+                <form action="/clientes/crear">
+                    <input type="submit" value="Crear">
+                </form>
+            </div>
+        </div>
+        <div class="tabla">
+            <div class="fila cabecera">
+                <div class="celda">Id</div>
+                <div class="celda">Nombre</div>
+                <div class="celda">Apellido1</div>
+                <div class="celda">Apellido2</div>
+                <div class="celda">Ciudad</div>
+                <div class="celda">Categoría</div>
+                <div class="celda">Acciones</div>
+            </div>
+            <div class="fila" th:each="cliente : ${clientes}">
+                <div class="celda" th:text="${cliente.id}">0</div>
+                <div class="celda" th:text="${cliente.nombre}">Nombre</div>
+                <div class="celda" th:text="${cliente.apellido1}">Apellido1</div>
+                <div class="celda" th:text="${cliente.apellido2 ?: '&nbsp;'}">Apellido2</div>
+                <div class="celda" th:text="${cliente.ciudad}">Ciudad</div>
+                <div class="celda" th:text="${cliente.categoría}">Categoría</div>
+                <div class="celda acciones">
+                <form th:action="@{/clientes/detalle/{id}(id=${cliente.id})}" method="get">
+                    <input type="hidden" name="id" th:value="${cliente.id}"/>
+                    <input type="submit" value="Ver detalle"/>
+                </form>
+                <form th:action="@{/clientes/editar/{id}(id=${cliente.id})}" method="get">
+                    <input type="hidden" name="id" th:value="${cliente.id}"/>
+                    <input type="submit" value="Editar"/>
+                </form>
+                <form th:action="@{/clientes/eliminar/{id}(id=${cliente.id})}" method="post">
+                    <input type="hidden" name="id" th:value="${cliente.id}"/>
+                    <input type="submit" value="Eliminar"/>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
