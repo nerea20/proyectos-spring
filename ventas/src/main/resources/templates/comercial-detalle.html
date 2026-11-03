@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del comercial</title>
+</head>
+<body>
+    <h1>Detalle del comercial</h1>
+    <dl>
+        <dt>Id</dt><dd th:text="${comercial.id}"></dd>
+        <dt>Nombre</dt><dd th:text="${comercial.nombre}"></dd>
+        <dt>Apellido 1</dt><dd th:text="${comercial.apellido1}"></dd>
+        <dt>Apellido 2</dt><dd th:text="${comercial.apellido2}"></dd>
+        <dt>Comisión</dt><dd th:text="${comercial.comision}"></dd>
+    </dl>
+    <a th:href="@{/comerciales}">Volver a comerciales</a>
+    <a th:href="@{/comerciales/editar/{id}(id=${comercial.id})}">Editar</a>
+</body>
+</html>

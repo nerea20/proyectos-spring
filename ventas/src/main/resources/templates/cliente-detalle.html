@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del cliente</title>
+</head>
+<body>
+    <h1>Detalle del cliente</h1>
+    <dl>
+        <dt>Id</dt><dd th:text="${cliente.id}"></dd>
+        <dt>Nombre</dt><dd th:text="${cliente.nombre}"></dd>
+        <dt>Apellido 1</dt><dd th:text="${cliente.apellido1}"></dd>
+        <dt>Apellido 2</dt><dd th:text="${cliente.apellido2}"></dd>
+        <dt>Ciudad</dt><dd th:text="${cliente.ciudad}"></dd>
+        <dt>Categoría</dt><dd th:text="${cliente.categoría}"></dd>
+    </dl>
+    <a th:href="@{/clientes}">Volver a clientes</a>
+    <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}">Editar</a>
+</body>
+</html>
