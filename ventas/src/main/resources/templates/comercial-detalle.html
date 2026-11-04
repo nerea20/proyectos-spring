@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalle del comercial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Detalle del comercial</h1>
-    <dl>
-        <dt>Id</dt><dd th:text="${comercial.id}"></dd>
-        <dt>Nombre</dt><dd th:text="${comercial.nombre}"></dd>
-        <dt>Apellido 1</dt><dd th:text="${comercial.apellido1}"></dd>
-        <dt>Apellido 2</dt><dd th:text="${comercial.apellido2}"></dd>
-        <dt>Comisión</dt><dd th:text="${comercial.comision}"></dd>
-    </dl>
-    <a th:href="@{/comerciales}">Volver a comerciales</a>
-    <a th:href="@{/comerciales/editar/{id}(id=${comercial.id})}">Editar</a>
+    <main class="container py-4">
+        <h1 class="h2 mb-4">Detalle del comercial</h1>
+        <dl class="row g-3 mb-4">
+            <div class="col-12 col-md-6"><dt class="text-secondary">Id</dt><dd th:text="${comercial.id}"></dd></div>
+            <div class="col-12 col-md-6"><dt class="text-secondary">Nombre</dt><dd th:text="${comercial.nombre}"></dd></div>
+            <div class="col-12 col-md-6"><dt class="text-secondary">Apellido 1</dt><dd th:text="${comercial.apellido1}"></dd></div>
+            <div class="col-12 col-md-6"><dt class="text-secondary">Apellido 2</dt><dd th:text="${comercial.apellido2}"></dd></div>
+            <div class="col-12 col-md-6"><dt class="text-secondary">Comisión</dt><dd th:text="${comercial.comision}"></dd></div>
+        </dl>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-secondary" th:href="@{/comerciales}">Volver a comerciales</a>
+            <a class="btn btn-primary" th:href="@{/comerciales/editar/{id}(id=${comercial.id})}">Editar</a>
+        </div>
+    </main>
 </body>
 </html>
