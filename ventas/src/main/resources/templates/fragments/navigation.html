@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="navigation">
+        <nav class="bg-dark shadow-sm py-3" aria-label="Navegación principal">
+            <div class="container">
+                <div class="d-flex flex-wrap justify-content-end gap-2 gap-md-3">
+                    <a class="nav-link link-light fs-5 fw-semibold px-3 py-2 rounded-1" th:href="@{/pedidos}">Pedidos</a>
+                    <a class="nav-link link-light fs-5 fw-semibold px-3 py-2 rounded-1" th:href="@{/clientes}">Clientes</a>
+                    <a class="nav-link link-light fs-5 fw-semibold px-3 py-2 rounded-1" th:href="@{/comerciales}">Comerciales</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+</body>
+</html>

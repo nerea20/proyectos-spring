@@ -12,37 +12,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 
+@RequestMapping("/clientes")
 @Controller
 public class ClienteController {
 
     @Autowired 
     private ClienteService clienteService;
 
-    @GetMapping("/clientes")
+    @GetMapping
     public String listar(Model model) {
         List<Cliente> clientes = clienteService.listAll();
         model.addAttribute("clientes", clientes);
         return "clientes";
     }
 
-    @GetMapping("/clientes/crear")
+    @GetMapping("/crear")
     public String mostrarFormularioCrear(Model model) {
         model.addAttribute("cliente", new Cliente());
         return "cliente-crear";
     }
 
-    @PostMapping("/clientes/crear")
+    @PostMapping("/crear")
     public String crear(@ModelAttribute Cliente cliente, RedirectAttributes redirectAttributes) {
         clienteService.create(cliente);
         redirectAttributes.addFlashAttribute("mensaje", "Cliente creado correctamente.");
         return "redirect:/clientes";
     }
 
-    @GetMapping("/clientes/detalle/{id}")
+    @GetMapping("/detalle/{id}")
     public String detalle(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Cliente> cliente = clienteService.find(id);
         if (cliente.isEmpty()) {
@@ -53,7 +55,7 @@ public class ClienteController {
         return "cliente-detalle";
     }
 
-    @GetMapping("/clientes/editar/{id}")
+    @GetMapping("/editar/{id}")
     public String editar(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Cliente> cliente = clienteService.find(id);
         if (cliente.isEmpty()) {
@@ -64,7 +66,7 @@ public class ClienteController {
         return "cliente-formulario";
     }
 
-    @PostMapping("/clientes/editar/{id}")
+    @PostMapping("/editar/{id}")
     public String actualizar(@PathVariable int id, @ModelAttribute Cliente cliente,
             RedirectAttributes redirectAttributes) {
         cliente.setId(id);
@@ -73,7 +75,7 @@ public class ClienteController {
         return "redirect:/clientes";
     }
 
-    @PostMapping("/clientes/eliminar/{id}")
+    @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable int id, RedirectAttributes redirectAttributes) {
         try {
             clienteService.delete(id);
