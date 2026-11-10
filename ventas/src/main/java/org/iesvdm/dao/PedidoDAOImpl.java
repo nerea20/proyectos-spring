@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import org.iesvdm.dto.ClientePedidosTotalDTO;
+import org.iesvdm.dto.EstadisticasPedidosDTO;
 import org.iesvdm.modelo.Pedido;
 import org.iesvdm.modelo.PedidoDetalle;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -124,6 +126,51 @@ public class PedidoDAOImpl implements PedidoDAO {
                 this::mapPedidoDetalle,
                 comercialId);
     }
+
+            @Override
+            public EstadisticasPedidosDTO getEstadisticasByCommercialId(int comercialId) {
+            return jdbcTemplate.queryForObject(
+                """
+                SELECT COUNT(*) AS cantidad_pedidos,
+                       COALESCE(SUM(total), 0) AS importe_total,
+                      COALESCE(AVG(total), 0) AS importe_medio,
+                      COALESCE(MAX(total), 0) AS importe_maximo,
+                      COALESCE(MIN(total), 0) AS importe_minimo
+                FROM pedido
+                WHERE id_comercial = ?
+                """,
+                (resultSet, rowNum) -> new EstadisticasPedidosDTO(
+                    resultSet.getLong("cantidad_pedidos"),
+                    resultSet.getBigDecimal("importe_total"),
+                    resultSet.getBigDecimal("importe_medio"),
+                    resultSet.getDouble("importe_maximo"),
+                    resultSet.getDouble("importe_minimo")),
+                comercialId);
+            }
+
+            @Override
+            public List<ClientePedidosTotalDTO> findClientesPorImporteTotalByCommercialId(int comercialId) {
+            return jdbcTemplate.query(
+                """
+                SELECT c.id AS cliente_id,
+                       CONCAT_WS(' ', c.nombre, c.apellido1, c.apellido2) AS cliente_nombre,
+                       SUM(p.total) AS importe_total
+                FROM cliente c
+                INNER JOIN pedido p ON p.id_cliente = c.id
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM pedido pc
+                    WHERE pc.id_cliente = c.id AND pc.id_comercial = ?
+                )
+                GROUP BY c.id, c.nombre, c.apellido1, c.apellido2
+                ORDER BY importe_total DESC, c.id
+                """,
+                (resultSet, rowNum) -> new ClientePedidosTotalDTO(
+                    resultSet.getInt("cliente_id"),
+                    resultSet.getString("cliente_nombre"),
+                    resultSet.getDouble("importe_total")),
+                comercialId);
+            }
 
     @Override
     public List<PedidoDetalle> findByClientId(int clienteId) {

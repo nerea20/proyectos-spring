@@ -38,6 +38,8 @@ public class ComercialController {
                 .map(comercial -> {
                     model.addAttribute("comercial", comercial);
                     model.addAttribute("pedidos", comercialService.findPedidosByCommercialId(id));
+                    model.addAttribute("estadisticas", comercialService.getEstadisticasPedidosByCommercialId(id));
+                    model.addAttribute("clientesPorImporte", comercialService.findClientesPorImporteTotalByCommercialId(id));
                     return "comercial-detalle";
                 })
                 .orElseGet(() -> {
@@ -68,6 +70,8 @@ public class ComercialController {
         }
         model.addAttribute("comercial", comercial.get());
         model.addAttribute("pedidos", comercialService.findPedidosByCommercialId(id));
+        model.addAttribute("estadisticas", comercialService.getEstadisticasPedidosByCommercialId(id));
+        model.addAttribute("clientesPorImporte", comercialService.findClientesPorImporteTotalByCommercialId(id));
         return "comercial-detalle";
     }
 

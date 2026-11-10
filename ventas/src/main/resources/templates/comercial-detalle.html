@@ -17,6 +17,12 @@
             <div class="col-12 col-md-6"><dt class="text-secondary">Apellido 2</dt><dd th:text="${comercial.apellido2}"></dd></div>
             <div class="col-12 col-md-6"><dt class="text-secondary">Comisión</dt><dd th:text="${comercial.comision}"></dd></div>
         </dl>
+        <h2 class="h3 mb-3">Estadísticas de pedidos</h2>
+        <dl class="row g-3 mb-4">
+            <div class="col-12 col-md-4"><dt class="text-secondary">Cantidad de pedidos</dt><dd th:text="${estadisticas.cantidadPedidos}"></dd></div>
+            <div class="col-12 col-md-4"><dt class="text-secondary">Importe total</dt><dd th:text="${#numbers.formatDecimal(estadisticas.importeTotal, 1, 2)}"></dd></div>
+            <div class="col-12 col-md-4"><dt class="text-secondary">Importe medio</dt><dd th:text="${#numbers.formatDecimal(estadisticas.importeMedio, 1, 2)}"></dd></div>
+        </dl>
         <div class="d-flex flex-wrap gap-2">
             <a class="btn btn-outline-secondary" th:href="@{/comerciales}">Volver a comerciales</a>
             <a class="btn btn-primary" th:href="@{/comerciales/editar/{id}(id=${comercial.id})}">Editar</a>
@@ -27,6 +33,10 @@
             <p class="text-muted">No hay pedidos asociados a este comercial.</p>
         </div>
         <div th:if="${!pedidos.isEmpty()}">
+            <div class="d-flex flex-wrap gap-3 mb-3" aria-label="Leyenda de importes de pedidos">
+                <span><span class="d-inline-block bg-success me-2" style="width: 1rem; height: 1rem;" aria-hidden="true"></span>Importe máximo</span>
+                <span><span class="d-inline-block bg-warning me-2" style="width: 1rem; height: 1rem;" aria-hidden="true"></span>Importe mínimo</span>
+            </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -37,12 +47,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="pedido : ${pedidos}">
+                    <tr th:each="pedido : ${pedidos}"
+                        th:classappend="${pedido.total == estadisticas.importeMaximo ? 'table-success' : (pedido.total == estadisticas.importeMinimo ? 'table-warning' : '')}">
                         <td th:text="${pedido.id}"></td>
                         <td th:text="${pedido.fecha}"></td>
                            <td><a th:href="@{/clientes/detalle/{id}(id=${pedido.clienteId})}"
                                th:text="${pedido.clienteNombre}"></a></td>
                         <td th:text="${pedido.total}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <h2 class="h3 mb-4">Clientes por importe total de pedidos</h2>
+        <div th:if="${clientesPorImporte.isEmpty()}">
+            <p class="text-muted">No hay clientes con pedidos asociados a este comercial.</p>
+        </div>
+        <div class="table-responsive" th:if="${!clientesPorImporte.isEmpty()}">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Importe total de todos sus pedidos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cliente : ${clientesPorImporte}">
+                        <td><a th:href="@{/clientes/detalle/{id}(id=${cliente.clienteId})}"
+                               th:text="${cliente.nombreCompleto}"></a></td>
+                        <td th:text="${#numbers.formatDecimal(cliente.importeTotal, 1, 2)}"></td>
                     </tr>
                 </tbody>
             </table>
