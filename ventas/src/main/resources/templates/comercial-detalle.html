@@ -21,6 +21,32 @@
             <a class="btn btn-outline-secondary" th:href="@{/comerciales}">Volver a comerciales</a>
             <a class="btn btn-primary" th:href="@{/comerciales/editar/{id}(id=${comercial.id})}">Editar</a>
         </div>
+        <hr>
+        <h2 class="h3 mb-4">Pedidos del comercial</h2>
+        <div th:if="${pedidos.isEmpty()}">
+            <p class="text-muted">No hay pedidos asociados a este comercial.</p>
+        </div>
+        <div th:if="${!pedidos.isEmpty()}">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pedido : ${pedidos}">
+                        <td th:text="${pedido.id}"></td>
+                        <td th:text="${pedido.fecha}"></td>
+                           <td><a th:href="@{/clientes/detalle/{id}(id=${pedido.clienteId})}"
+                               th:text="${pedido.clienteNombre}"></a></td>
+                        <td th:text="${pedido.total}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </main>
 </body>
 </html>

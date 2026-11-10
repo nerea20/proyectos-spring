@@ -109,6 +109,40 @@ public class PedidoDAOImpl implements PedidoDAO {
     }
 
     @Override
+    public List<PedidoDetalle> findByCommercialId(int comercialId) {
+        return jdbcTemplate.query(
+                """
+                SELECT p.id, p.total, p.fecha, p.id_cliente, p.id_comercial,
+                       CONCAT_WS(' ', c.nombre, c.apellido1, c.apellido2) AS cliente_nombre,
+                       CONCAT_WS(' ', co.nombre, co.apellido1, co.apellido2) AS comercial_nombre
+                FROM pedido p
+                INNER JOIN cliente c ON p.id_cliente = c.id
+                INNER JOIN comercial co ON p.id_comercial = co.id
+                WHERE p.id_comercial = ?
+                ORDER BY p.id
+                """,
+                this::mapPedidoDetalle,
+                comercialId);
+    }
+
+    @Override
+    public List<PedidoDetalle> findByClientId(int clienteId) {
+        return jdbcTemplate.query(
+                """
+                SELECT p.id, p.total, p.fecha, p.id_cliente, p.id_comercial,
+                       CONCAT_WS(' ', c.nombre, c.apellido1, c.apellido2) AS cliente_nombre,
+                       CONCAT_WS(' ', co.nombre, co.apellido1, co.apellido2) AS comercial_nombre
+                FROM pedido p
+                INNER JOIN cliente c ON p.id_cliente = c.id
+                INNER JOIN comercial co ON p.id_comercial = co.id
+                WHERE p.id_cliente = ?
+                ORDER BY p.id
+                """,
+                this::mapPedidoDetalle,
+                clienteId);
+    }
+
+    @Override
     public void update(Pedido pedido) {
         String sqlUpdate = """
                 UPDATE pedido SET

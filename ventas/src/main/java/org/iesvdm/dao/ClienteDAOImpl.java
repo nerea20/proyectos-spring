@@ -149,6 +149,21 @@ public class ClienteDAOImpl implements ClienteDAO {
 		log.info("Delete de Cliente con {} registros eliminados.", rows);		
 		
 	}
+
+	@Override
+	public List<Cliente> getByCiudad(String ciudad) {
+		return jdbcTemplate.query(
+				"SELECT * FROM cliente WHERE ciudad = ?",
+				(rs, rowNum) -> new Cliente(rs.getInt("id"),
+									  rs.getString("nombre"),
+									  rs.getString("apellido1"),
+									  rs.getString("apellido2"),
+									  rs.getString("ciudad"),
+									  rs.getInt("categoría")
+								  ),
+				ciudad
+		);
+	}
 	
 }
 

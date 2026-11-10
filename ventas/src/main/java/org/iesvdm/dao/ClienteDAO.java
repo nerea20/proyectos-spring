@@ -10,4 +10,5 @@ public interface ClienteDAO {
 	public Optional<Cliente>  find(int id);
 	public void update(Cliente cliente);
 	public void delete(int id);
+    public List<Cliente> getByCiudad(String ciudad);
 }

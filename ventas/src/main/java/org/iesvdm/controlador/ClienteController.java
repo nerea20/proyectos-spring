@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -25,9 +26,13 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public String listar(Model model) {
+    public String listar(@RequestParam (required = false) String ciudad, Model model) {
         List<Cliente> clientes = clienteService.listAll();
+        if (ciudad != null && !ciudad.isEmpty()) {
+            clientes = clienteService.listByCiudad(ciudad);
+        }
         model.addAttribute("clientes", clientes);
+        model.addAttribute("ciudad", ciudad);
         return "clientes";
     }
 
@@ -52,6 +57,7 @@ public class ClienteController {
             return "redirect:/clientes";
         }
         model.addAttribute("cliente", cliente.get());
+        model.addAttribute("pedidos", clienteService.findPedidosByClientId(id));
         return "cliente-detalle";
     }
 

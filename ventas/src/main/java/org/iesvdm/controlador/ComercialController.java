@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+
 @RequestMapping("/comerciales")
 @Controller 
 public class ComercialController {
@@ -29,6 +30,20 @@ public class ComercialController {
         List<Comercial> comerciales = comercialService.listAll();
         model.addAttribute("comerciales", comerciales);
         return "comerciales";
+    }
+
+    @GetMapping("/{id}")
+    public String getMethodName(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
+        return comercialService.find(id)
+                .map(comercial -> {
+                    model.addAttribute("comercial", comercial);
+                    model.addAttribute("pedidos", comercialService.findPedidosByCommercialId(id));
+                    return "comercial-detalle";
+                })
+                .orElseGet(() -> {
+                    redirectAttributes.addFlashAttribute("mensaje", "No se ha encontrado el comercial.");
+                    return "redirect:/comerciales";
+                });
     }
 
     @GetMapping("/crear")
@@ -52,6 +67,7 @@ public class ComercialController {
             return "redirect:/comerciales";
         }
         model.addAttribute("comercial", comercial.get());
+        model.addAttribute("pedidos", comercialService.findPedidosByCommercialId(id));
         return "comercial-detalle";
     }
 
