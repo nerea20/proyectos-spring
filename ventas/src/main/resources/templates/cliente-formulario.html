@@ -36,6 +36,56 @@
                 <a class="btn btn-outline-secondary" th:href="@{/clientes}">Cancelar</a>
             </div>
         </form>
+        <hr class="my-4">
+        <section aria-labelledby="vincular-comercial">
+            <h2 class="h4 mb-3" id="vincular-comercial">Añadir comercial</h2>
+            <form class="row g-3" th:action="@{/clientes/editar/{id}/comerciales(id=${cliente.id})}" method="post">
+                <div class="col-12 col-md-6">
+                    <label class="form-label" for="comercialId">Comercial</label>
+                    <select class="form-select" id="comercialId" name="comercialId" required>
+                        <option value="" selected disabled>Selecciona un comercial</option>
+                        <option th:each="comercial : ${comercialesDisponibles}"
+                                th:value="${comercial.id}"
+                                th:text="|${comercial.nombre} ${comercial.apellido1} ${comercial.apellido2 ?: ''}|"></option>
+                    </select>
+                    <div class="form-text" th:if="${comercialesDisponibles.isEmpty()}">No hay comerciales disponibles para vincular.</div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label" for="fechaVinculo">Fecha</label>
+                    <input class="form-control" id="fechaVinculo" name="fecha" type="date" required>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label" for="prioridad">Prioridad</label>
+                    <input class="form-control" id="prioridad" name="prioridad" type="number" min="1" step="1" required>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-success" type="submit" th:disabled="${comercialesDisponibles.isEmpty()}">Añadir Comercial</button>
+                </div>
+            </form>
+        </section>
+        <section class="mt-4" aria-labelledby="comerciales-vinculados">
+            <h2 class="h4 mb-3" id="comerciales-vinculados">Comerciales vinculados</h2>
+            <p class="text-muted" th:if="${comercialesVinculados.isEmpty()}">Este cliente todavía no tiene comerciales vinculados.</p>
+            <div class="table-responsive" th:if="${!comercialesVinculados.isEmpty()}">
+                <table class="table table-striped">
+                    <thead>
+                        <tr><th>Comercial</th><th>Fecha</th><th>Prioridad</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="vinculo : ${comercialesVinculados}">
+                            <td th:text="${vinculo.comercialNombre}"></td>
+                            <td th:text="${vinculo.fecha}"></td>
+                            <td th:text="${vinculo.prioridad}"></td>
+                            <td>
+                                <form th:action="@{/clientes/editar/{id}/comerciales/{comercialId}/eliminar(id=${cliente.id}, comercialId=${vinculo.comercialId})}" method="post">
+                                    <button class="btn btn-outline-danger btn-sm" type="submit">Borrar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 </body>
 </html>

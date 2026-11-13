@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.iesvdm.dao.ClienteDAO;
+import org.iesvdm.dao.ClienteComercialDAO;
 import org.iesvdm.dao.PedidoDAO;
 import org.iesvdm.modelo.Cliente;
+import org.iesvdm.modelo.ClienteComercial;
 import org.iesvdm.modelo.PedidoDetalle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class ClienteService {
 
     @Autowired 
     private ClienteDAO clienteDAO;
+    @Autowired
+    private ClienteComercialDAO clienteComercialDAO;
     @Autowired
     private PedidoDAO pedidoDAO;
 
@@ -40,6 +44,18 @@ public class ClienteService {
 
     public void update(Cliente cliente) {
         clienteDAO.update(cliente);
+    }
+
+    public List<ClienteComercial> findComercialesByClienteId(int clienteId) {
+        return clienteComercialDAO.findByClienteId(clienteId);
+    }
+
+    public void addComercial(ClienteComercial clienteComercial) {
+        clienteComercialDAO.create(clienteComercial);
+    }
+
+    public void deleteComercial(int clienteId, int comercialId) {
+        clienteComercialDAO.delete(clienteId, comercialId);
     }
 
     public void delete(int id) {
